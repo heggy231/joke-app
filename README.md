@@ -1,5 +1,7 @@
 # Joke app
 
+![demo](./public/jokeDemo.gif)
+
 Technology:
 
 - ajax with react
@@ -99,4 +101,57 @@ render() {
       </div>
     );
   }
+```
+## Joke is loading...
+Add isLoading to state obj with initial value of false. (default is not loading, loading gif won't show)
+If loading => gif of loading
+else => show the joke since done loading!
+
+Note: I must use ternary inside `JSX`, if-else statement is not an expression and doesn't resolve to a single value
+
+```js
+render() {
+    return (
+      <div>
+        <p>{this.state.isLoading ? <img src={spinnerBubble} alt="loading" width="80"/>  : this.state.joke}</p>
+        <button onClick={this._fetchJoke}>Chuck Norris Joke</button>
+      </div>
+    );
+```
+
+Then update the isLoading inside of _fetchJoke() method.
+Once you setState `isLoading: true`, place fetch api call inside of the `setState` of isLoading.
+
+```jsx
+_fetchJoke = () => {
+    this.setState(
+      {
+        isLoading: true,
+      },
+      () => {
+        // inside of setState cb ensure isLoading is set to true before making api call
+        const jokeUrl =
+          "https://api.chucknorris.io/jokes/search?query=california";
+
+        fetch(jokeUrl)
+          .then((response) => response.json())
+          .then((jokeJson) => {
+            const maxNum = jokeJson.total; // total # of joke
+            const randomNum = Math.floor(Math.random() * maxNum); // random number start: 0 end: maxNum
+
+            console.log(jokeJson.result[randomNum].value);
+            // put the text of joke in state
+            this.setState(
+              {
+                joke: jokeJson.result[randomNum].value,
+                isLoading: false,
+              },
+              () => {
+                console.log("New Joke stored");
+              }
+            );
+          });
+      }
+    );
+  };
 ```
