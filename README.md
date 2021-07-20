@@ -90,4 +90,13 @@ fetch(jokeUrl)
 
 * calling `_fetchJoke()`:
 
-
+```js
+render() {
+    return (
+      <div>
+        <p>{this.state.joke}</p>
+        <button onClick={this._fetchJoke}>Chuck Norris Joke</button>
+      </div>
+    );
+  }
+```
